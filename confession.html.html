@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Confession Letter</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      font-family: "Georgia", serif;
+      overflow: hidden;
+    }
+
+    .envelope {
+      position: relative;
+      width: 500px;
+      height: 350px;
+      background: #fff0f5;
+      border: 4px solid #e75480;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+      border-radius: 20px;
+      cursor: pointer;
+      perspective: 1000px;
+      overflow: hidden;
+    }
+
+    .flap {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #ff4d6d;
+      clip-path: polygon(0 0, 100% 0, 50% 50%);
+      transform-origin: top;
+      transition: transform 2s ease;
+      z-index: 2;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 10px;
+      font-size: 22px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+
+    .stamp {
+      position: absolute;
+      top: 15px; right: 15px;
+      width: 70px; height: 70px;
+      background: white;
+      border: 2px dashed #ff6b81;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px;
+      transform: rotate(10deg);
+      z-index: 3;
+    }
+
+    .letter {
+      opacity: 0;
+      position: absolute;
+      inset: 0;
+      background: white;
+      padding: 35px;
+      box-sizing: border-box;
+      transition: opacity 1s ease, transform 1s ease;
+      transform: translateY(30px);
+      z-index: 1;
+      font-size: 18px;
+      border-radius: 14px;
+      line-height: 1.6;
+      box-shadow: inset 0 0 20px rgba(255,182,193,0.4);
+
+      /* make it scrollable */
+      overflow-y: auto;
+      max-height: 100%;
+    }
+
+    /* style scrollbar */
+    .letter::-webkit-scrollbar {
+      width: 8px;
+    }
+    .letter::-webkit-scrollbar-thumb {
+      background: #ff6b81;
+      border-radius: 4px;
+    }
+
+    .envelope.open .flap { transform: rotateX(-180deg); }
+    .envelope.open .letter { opacity: 1; transform: translateY(0); transition-delay: 0.8s; }
+
+    .hint {
+      position: absolute;
+      bottom: -35px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      font-style: italic;
+      color: #b22222;
+    }
+
+    /* Floating hearts */
+    .hearts {
+      position: absolute;
+      left: 50%;
+      bottom: 40%;
+      transform: translateX(-50%);
+      z-index: 5;
+    }
+    .heart {
+      position: absolute;
+      font-size: 28px;
+      opacity: 0;
+      animation: floatUp 2.5s ease forwards;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-200px) scale(1.6); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="envelope" id="envelope">
+    <div class="flap">💌 click here 💌</div>
+    <div class="stamp">❤️</div>
+
+    <div class="letter">
+      <h2>Dear [Coleen],</h2>
+      <p>hi coleen or COLENGG alam mona siguro to base on the design if hindi pa this is my confession letter for you.
+        I made this long message to confess my feelings for you, i just want to say na i like you since the first time i saw you 
+        nung nag announce kayo ng event sa soc-sci club and that's why finollow kita sa ig and hanggang sa nag parinig me siguro naman
+        napapansin mona na may crush na me sayo non. But i still wanna confess my feelings for you i didn't fall for you 
+        just for your looks that's not the reason why i fell for you, i fell for your personalityyy and the way we laugh at each others
+        joke even it's not funny and kada mag uusap tayo it makes me happy kahit minsan ang random lang ng pinag uusapan natin pero it still 
+        makes me happy and i really enjoy our little conversation kahit na minsan ang random and nag aasaran tayo at mga kwentuhan natin
+        i fell for you not for your looks, i fell for your personalityyy but you look beautiful tlga and you those beautiful eyes and smile tooo, your vibe, your style, everything thing about you
+        and ginawan ko tlga ng code para mag confess sayo so it would be special naman but that's it for my confession letter po.🌹</p>
+
+      <p>This is my confession:  
+         I really like you!</p>
+      <p>Thank you for existing, thank you for being you.I'll be cheering you and keeping you happy even when youre sad i'll always remind you everything is gonna be okay.💖</p>
+      <p>by<br>[bobin or hapon]</p>
+      <p>P.S. nilagay ko fav song mo kay earl agustin  ✨</p>
+    </div>
+
+    <div class="hint">(click the envelope to open, then scroll to read)</div>
+    <div class="hearts" id="hearts"></div>
+  </div>
+
+  <!-- Background music -->
+  <audio id="bgMusic" src="pagibig.mp3"></audio>
+
+  <script>
+    const envelope = document.getElementById('envelope');
+    const heartsContainer = document.getElementById('hearts');
+    const bgMusic = document.getElementById('bgMusic');
+    const heartColors = ["❤️","💖","💕","💓","💗","💘"];
+
+    envelope.addEventListener('click', () => {
+      envelope.classList.add('open');
+
+      // Release hearts
+      for (let i = 0; i < 8; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.textContent = heartColors[i % heartColors.length];
+        heart.style.left = `${Math.random() * 80 - 40}px`;
+        heart.style.animationDelay = `${i * 0.25}s`;
+        heartsContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 3000);
+      }
+
+      // Play music automatically from intro
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+    });
+  </script>
+</body>
+</html>
